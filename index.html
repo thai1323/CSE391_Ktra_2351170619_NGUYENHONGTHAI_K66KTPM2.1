@@ -99,7 +99,6 @@
         localStorage.setItem('my_tasks_storage', JSON.stringify(listTasks));
     }
 
-    // Phân tách dữ liệu động để vẽ nhãn và vòng tiến trình tương ứng cho từng hàng
     function displayTasksToUI() {
         const area = document.getElementById('mainTaskList');
         area.innerHTML = ''; 
@@ -110,7 +109,6 @@
         }
 
         listTasks.forEach(item => {
-            // Logic 1: Xác định class cho vòng tròn tiến trình dựa trên trạng thái từ JSON
             let circleClass = "circle-todo";
             if (item.status === "In Progress") {
                 circleClass = "circle-progress";
@@ -118,7 +116,6 @@
                 circleClass = "circle-done";
             }
 
-            // Logic 2: Nếu tạo mới chưa có trường status, mặc định hiển thị là "To Do"
             let currentStatus = item.status ? item.status : "To Do";
 
             const rowHTML = `
@@ -182,7 +179,7 @@
             id: Date.now(), 
             task: textValue.trim(),
             priority: chosenPrio,
-            status: "To Do" // Công việc mới tạo mặc định gán trạng thái To Do theo kịch bản mẫu
+            status: "To Do"
         };
 
         listTasks.push(currentNewItem);

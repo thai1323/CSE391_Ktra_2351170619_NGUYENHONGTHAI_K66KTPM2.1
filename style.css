@@ -3,14 +3,14 @@ body {
     font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
 }
 
-/* Khung lớn chứa danh sách */
+
 .task-board {
     background-color: #f0f4ff;
     border: 1px solid #cedeff;
     border-radius: 12px;
 }
 
-/* Từng khối Task item riêng lẻ */
+
 .task-card-item {
     background-color: #ffffff;
     border-radius: 16px !important;
@@ -19,7 +19,6 @@ body {
     border: none;
 }
 
-/* Định dạng chữ nhãn nhỏ phía trên */
 .label-sub {
     font-size: 0.75rem;
     color: #a0a5b5;
@@ -27,12 +26,10 @@ body {
     font-weight: 500;
 }
 
-/* Màu sắc chữ cho độ ưu tiên */
 .prio-High { color: #d9383a; font-weight: 700; }
 .prio-Medium { color: #f1b44c; font-weight: 700; }
 .prio-Low { color: #10b981; font-weight: 700; }
 
-/* Nhãn trạng thái màu xám bo tròn */
 .status-badge {
     background-color: #eaeef6;
     color: #7a8293;
@@ -43,7 +40,6 @@ body {
     display: inline-block;
 }
 
-/* TỰ VẼ VÒNG TRÒN TIẾN TRÌNH THEO MẪU BẰNG CSS KHÔNG DÙNG ẢNH */
 .progress-circle {
     width: 24px;
     height: 24px;
@@ -51,22 +47,22 @@ body {
     display: inline-block;
     vertical-align: middle;
 }
-/* Trạng thái To Do: Vòng tròn rỗng xám mờ */
+
 .circle-todo {
     border: 2px solid #e2e8f0;
 }
-/* Trạng thái In Progress: Vòng tròn viền tím khuyết (nửa đặc nửa rỗng) */
+
 .circle-progress {
     border: 3px solid #6366f1;
     border-right-color: #e2e8f0;
     border-bottom-color: #e2e8f0;
 }
-/* Trạng thái Done: Vòng tròn viền tím đặc hoàn toàn */
+
 .circle-done {
     border: 3px solid #6366f1;
 }
 
-/* GIẢ LẬP ICON SỬA/XÓA BẰNG TEXT VÀ HOVER HIỆU ỨNG */
+
 .btn-action-edit, .btn-action-delete {
     background: none;
     border: none;
@@ -76,11 +72,10 @@ body {
     cursor: pointer;
 }
 .btn-action-edit { color: #334155; }
-.btn-action-edit::before { content: "📝"; } /* Giả lập icon bằng Emoji hoặc text ký hiệu */
+.btn-action-edit::before { content: "📝"; } 
 .btn-action-delete { color: #ef4444; }
 .btn-action-delete::before { content: "🗑️"; }
 
-/* Tùy biến nút chọn độ ưu tiên trong Form */
 .btn-outline-danger-custom { color: #d9383a; border-color: #fecaca; }
 .btn-check:checked + .btn-outline-danger-custom { background-color: #fecaca; color: #d9383a; }
 .btn-outline-warning-custom { color: #f1b44c; border-color: #fef3c7; }
