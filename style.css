@@ -17,11 +17,6 @@ body {
     padding: 16px 20px;
     margin-bottom: 12px;
     border: none;
-    transition: transform 0.2s;
-}
-
-.task-card-item:hover {
-    transform: translateY(-2px);
 }
 
 /* Định dạng chữ nhãn nhỏ phía trên */
@@ -37,11 +32,57 @@ body {
 .prio-Medium { color: #f1b44c; font-weight: 700; }
 .prio-Low { color: #10b981; font-weight: 700; }
 
-/* Custom nút chọn Priority trong Form (Radio giả dạng Button) */
+/* Nhãn trạng thái màu xám bo tròn */
+.status-badge {
+    background-color: #eaeef6;
+    color: #7a8293;
+    font-size: 0.8rem;
+    font-weight: 600;
+    padding: 6px 14px;
+    border-radius: 8px;
+    display: inline-block;
+}
+
+/* TỰ VẼ VÒNG TRÒN TIẾN TRÌNH THEO MẪU BẰNG CSS KHÔNG DÙNG ẢNH */
+.progress-circle {
+    width: 24px;
+    height: 24px;
+    border-radius: 50%;
+    display: inline-block;
+    vertical-align: middle;
+}
+/* Trạng thái To Do: Vòng tròn rỗng xám mờ */
+.circle-todo {
+    border: 2px solid #e2e8f0;
+}
+/* Trạng thái In Progress: Vòng tròn viền tím khuyết (nửa đặc nửa rỗng) */
+.circle-progress {
+    border: 3px solid #6366f1;
+    border-right-color: #e2e8f0;
+    border-bottom-color: #e2e8f0;
+}
+/* Trạng thái Done: Vòng tròn viền tím đặc hoàn toàn */
+.circle-done {
+    border: 3px solid #6366f1;
+}
+
+/* GIẢ LẬP ICON SỬA/XÓA BẰNG TEXT VÀ HOVER HIỆU ỨNG */
+.btn-action-edit, .btn-action-delete {
+    background: none;
+    border: none;
+    font-weight: bold;
+    font-size: 1.1rem;
+    padding: 2px 6px;
+    cursor: pointer;
+}
+.btn-action-edit { color: #334155; }
+.btn-action-edit::before { content: "📝"; } /* Giả lập icon bằng Emoji hoặc text ký hiệu */
+.btn-action-delete { color: #ef4444; }
+.btn-action-delete::before { content: "🗑️"; }
+
+/* Tùy biến nút chọn độ ưu tiên trong Form */
 .btn-outline-danger-custom { color: #d9383a; border-color: #fecaca; }
 .btn-check:checked + .btn-outline-danger-custom { background-color: #fecaca; color: #d9383a; }
-
 .btn-outline-warning-custom { color: #f1b44c; border-color: #fef3c7; }
 .btn-check:checked + .btn-outline-warning-custom { background-color: #fef3c7; color: #f1b44c; }
-
 .btn-check:checked + .btn-success { background-color: #10b981; border-color: #10b981; }
