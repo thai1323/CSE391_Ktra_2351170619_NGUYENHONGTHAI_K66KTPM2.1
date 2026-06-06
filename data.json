@@ -1,7 +1,7 @@
 [
-  { "id": 1, "task": "Go to gym", "priority": "High" },
-  { "id": 2, "task": "Read a book", "priority": "Low" },
-  { "id": 3, "task": "Go to market", "priority": "Medium" },
-  { "id": 4, "task": "Learn Web Development", "priority": "High" },
-  { "id": 5, "task": "Do homework", "priority": "Low" }
+  { "id": 1, "task": "Go to gym", "priority": "High", "status": "To Do" },
+  { "id": 2, "task": "Read a book", "priority": "Low", "status": "Done" },
+  { "id": 3, "task": "Go to market", "priority": "Medium", "status": "In Progress" },
+  { "id": 4, "task": "Learn Web Development", "priority": "High", "status": "In Progress" },
+  { "id": 5, "task": "Do homework", "priority": "Low", "status": "To Do" }
 ]
