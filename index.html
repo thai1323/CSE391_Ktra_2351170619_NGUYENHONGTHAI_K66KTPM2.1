@@ -1,0 +1,178 @@
+<!DOCTYPE html>
+<html lang="vi">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Task List</title>
+    <link href="bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+
+    <div class="container my-5" style="max-width: 800px;">
+        <div class="task-container p-4 shadow-sm rounded-3">
+            <div class="d-flex justify-content-between align-items-center mb-4">
+                <h2 class="fw-bold text-dark m-0">Task List</h2>
+                <button class="btn btn-add-task fw-bold px-4 py-2" onclick="openModal()">
+                    + Add Task
+                </button>
+            </div>
+
+            <div class="task-list d-flex flex-column gap-3">
+                </div>
+        </div>
+    </div>
+
+    <div class="modal fade" id="addTaskModal" tabindex="-1" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered" style="max-width: 750px;">
+            <div class="modal-content border rounded-3">
+                <div class="modal-header border-0 pb-0">
+                    <h5 class="modal-title fw-bold text-dark">Add Task</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <form id="taskForm" class="needs-validation" novalidate>
+                    <div class="modal-body pt-2">
+                        <div class="mb-4">
+                            <label class="form-label text-muted fw-semibold small">Task</label>
+                            <input type="text" id="input-task-name" class="form-control rounded-pill py-2" placeholder="Type your task here..." maxLength="100" required>
+                            <div class="invalid-feedback">Vui lòng nhập tên công việc (Tối đa 100 ký tự và không bỏ trống)!</div>
+                        </div>
+
+                        <div class="mb-3">
+                            <label class="form-label text-muted fw-semibold small d-block">Priority</label>
+                            <div class="btn-group-priority" role="group">
+                                <input type="radio" class="btn-check" name="priorityOptions" id="btn-high" value="High" required>
+                                <label class="btn btn-outline-danger px-4 rounded-pill me-2" for="btn-high">High</label>
+
+                                <input type="radio" class="btn-check" name="priorityOptions" id="btn-medium" value="Medium">
+                                <label class="btn btn-outline-warning px-4 rounded-pill me-2" for="btn-medium">Medium</label>
+
+                                <input type="radio" class="btn-check" name="priorityOptions" id="btn-low" value="Low">
+                                <label class="btn btn-outline-success px-4 rounded-pill" for="btn-low">Low</label>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="modal-footer border-0 pt-0">
+                        <button type="button" class="btn btn-save px-4 py-2 fw-semibold" onclick="saveTask()">Add</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <script src="bootstrap.bundle.min.js"></script>
+
+    <script>
+        let tasks = [];
+        const taskModal = new bootstrap.Modal(document.getElementById('addTaskModal'));
+
+        function loadInitialData() {
+            if (localStorage.getItem('pureJsTasks')) {
+                tasks = JSON.parse(localStorage.getItem('pureJsTasks'));
+                renderTasks();
+            } else {
+                fetch('data.json')
+                    .then(response => response.json())
+                    .then(data => {
+                        tasks = data;
+                        renderTasks();
+                    })
+                    .catch(error => console.error("Lỗi đọc file JSON:", error));
+            }
+        }
+
+        function renderTasks() {
+            const container = document.querySelector('.task-list');
+            container.innerHTML = ''; 
+
+            tasks.forEach((task, index) => {
+                let priorityClass = "text-success";
+                if (task.priority === "High") priorityClass = "text-danger";
+                if (task.priority === "Medium") priorityClass = "text-warning";
+
+                let statusIcon = "○"; 
+                if (task.status === "Done") statusIcon = "●"; 
+                if (task.status === "In Progress") statusIcon = "◐"; 
+
+                container.innerHTML += `
+                    <div class="task-item d-flex align-items-center justify-content-between p-3 bg-white shadow-sm">
+                        <div style="flex: 2;">
+                            <small class="text-muted d-block">Task</small>
+                            <span class="fw-semibold text-dark">${task.name}</span>
+                        </div>
+                        <div style="flex: 1.5;">
+                            <small class="text-muted d-block">Priority</small>
+                            <span class="fw-bold ${priorityClass}">${task.priority}</span>
+                        </div>
+                        <div style="flex: 1;">
+                            <span class="badge bg-light text-muted border px-3 py-2 rounded-pill">${task.status}</span>
+                        </div>
+                        <div class="d-flex align-items-center gap-3 text-end" style="flex: 1.5; justify-content: flex-end;">
+                            <span class="status-indicator text-primary">${statusIcon}</span>
+                            <button class="btn btn-sm btn-light border py-1 px-2 text-dark small" onclick="toggleStatus(${index})">Trạng thái</button>
+                            <button class="btn btn-sm btn-outline-danger py-1 px-2 fw-bold" onclick="deleteTask(${index})">Xóa</button>
+                        </div>
+                    </div>
+                `;
+            });
+
+            localStorage.setItem('pureJsTasks', JSON.stringify(tasks));
+        }
+
+        function openModal() {
+            const form = document.getElementById('taskForm');
+            form.reset();
+            form.classList.remove('was-validated');
+            taskModal.show();
+        }
+
+        function saveTask() {
+            const form = document.getElementById('taskForm');
+
+            if (!form.checkValidity()) {
+                form.classList.add('was-validated');
+                return;
+            }
+
+            const nameValue = document.getElementById('input-task-name').value.trim();
+            const selectedRadio = document.querySelector('input[name="priorityOptions"]:checked');
+            const priorityValue = selectedRadio.value;
+
+            if (nameValue.length > 100) {
+                alert("Dữ liệu nhập vào không hợp lệ! Tên nhiệm vụ không được vượt quá 100 ký tự.");
+                return; 
+            }
+
+            tasks.push({
+                id: Date.now().toString(),
+                name: nameValue,
+                priority: priorityValue,
+                status: "To Do"
+            });
+
+            taskModal.hide();
+            renderTasks();
+        }
+
+        function deleteTask(index) {
+            if (confirm(`Bạn có chắc chắn muốn xóa nhiệm vụ "${tasks[index].name}" không?`)) {
+                tasks.splice(index, 1);
+                renderTasks();
+            }
+        }
+
+        function toggleStatus(index) {
+            const current = tasks[index].status;
+            if (current === "To Do") tasks[index].status = "In Progress";
+            else if (current === "In Progress") tasks[index].status = "Done";
+            else tasks[index].status = "To Do";
+            renderTasks();
+        }
+
+        loadInitialData();
+    </script>
+</body>
+
+</html>
