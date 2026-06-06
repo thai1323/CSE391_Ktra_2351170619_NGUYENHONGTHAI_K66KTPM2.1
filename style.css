@@ -1,43 +1,47 @@
 body {
-    background-color: #ffffff;
-    font-family: system-ui, -apple-system, sans-serif;
+    background-color: #f8faff;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
 }
-.task-container {
-    background-color: #f1f3f9;
-    border: 1px solid #dee2e6;
-}
-.btn-add-task {
-    background-color: #6342f4;
-    color: white;
+
+/* Khung lớn chứa danh sách */
+.task-board {
+    background-color: #f0f4ff;
+    border: 1px solid #cedeff;
     border-radius: 12px;
 }
-.btn-add-task:hover {
-    background-color: #4e2ed1;
-    color: white;
+
+/* Từng khối Task item riêng lẻ */
+.task-card-item {
+    background-color: #ffffff;
+    border-radius: 16px !important;
+    padding: 16px 20px;
+    margin-bottom: 12px;
+    border: none;
+    transition: transform 0.2s;
 }
-.task-item {
-    border-radius: 20px;
-    border: 1px solid #e2e5ed;
+
+.task-card-item:hover {
+    transform: translateY(-2px);
 }
-.btn-save {
-    background-color: #728197;
-    color: white;
-    border-radius: 10px;
+
+/* Định dạng chữ nhãn nhỏ phía trên */
+.label-sub {
+    font-size: 0.75rem;
+    color: #a0a5b5;
+    margin-bottom: 2px;
+    font-weight: 500;
 }
-.btn-check:checked + .btn-outline-danger {
-    background-color: #dc3545 !important;
-    color: white !important;
-}
-.btn-check:checked + .btn-outline-warning {
-    background-color: #ffc107 !important;
-    color: #212529 !important;
-}
-.btn-check:checked + .btn-outline-success {
-    background-color: #198754 !important;
-    color: white !important;
-}
-.status-indicator {
-    font-size: 1.3rem;
-    font-weight: bold;
-    user-select: none;
-}
+
+/* Màu sắc chữ cho độ ưu tiên */
+.prio-High { color: #d9383a; font-weight: 700; }
+.prio-Medium { color: #f1b44c; font-weight: 700; }
+.prio-Low { color: #10b981; font-weight: 700; }
+
+/* Custom nút chọn Priority trong Form (Radio giả dạng Button) */
+.btn-outline-danger-custom { color: #d9383a; border-color: #fecaca; }
+.btn-check:checked + .btn-outline-danger-custom { background-color: #fecaca; color: #d9383a; }
+
+.btn-outline-warning-custom { color: #f1b44c; border-color: #fef3c7; }
+.btn-check:checked + .btn-outline-warning-custom { background-color: #fef3c7; color: #f1b44c; }
+
+.btn-check:checked + .btn-success { background-color: #10b981; border-color: #10b981; }

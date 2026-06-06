@@ -1,178 +1,203 @@
 <!DOCTYPE html>
 <html lang="vi">
-
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Task List</title>
-    <link href="bootstrap.min.css" rel="stylesheet">
+    <title>Task List App - Full UI</title>
+    <link rel="stylesheet" href="bootstrap.min.css">
     <link rel="stylesheet" href="style.css">
 </head>
-
 <body>
 
-    <div class="container my-5" style="max-width: 800px;">
-        <div class="task-container p-4 shadow-sm rounded-3">
-            <div class="d-flex justify-content-between align-items-center mb-4">
-                <h2 class="fw-bold text-dark m-0">Task List</h2>
-                <button class="btn btn-add-task fw-bold px-4 py-2" onclick="openModal()">
-                    + Add Task
-                </button>
-            </div>
-
-            <div class="task-list d-flex flex-column gap-3">
-                </div>
+<div class="container my-5" style="max-width: 720px;">
+    
+    <div class="task-board p-4 shadow-sm">
+        <div class="d-flex justify-content-between align-items-center mb-4">
+            <h2 class="fw-bold m-0" style="color: #1e293b; font-size: 1.75rem;">Task List</h2>
+            <button class="btn btn-primary px-3 py-2 fw-semibold rounded-3 shadow-sm" data-bs-toggle="modal" data-bs-target="#addTaskModal" style="background-color: #6366f1; border: none;">
+                + Add Task
+            </button>
         </div>
+
+        <div id="mainTaskList"></div>
     </div>
 
-    <div class="modal fade" id="addTaskModal" tabindex="-1" aria-hidden="true">
-        <div class="modal-dialog modal-dialog-centered" style="max-width: 750px;">
-            <div class="modal-content border rounded-3">
-                <div class="modal-header border-0 pb-0">
-                    <h5 class="modal-title fw-bold text-dark">Add Task</h5>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                </div>
-                <form id="taskForm" class="needs-validation" novalidate>
-                    <div class="modal-body pt-2">
-                        <div class="mb-4">
-                            <label class="form-label text-muted fw-semibold small">Task</label>
-                            <input type="text" id="input-task-name" class="form-control rounded-pill py-2" placeholder="Type your task here..." maxLength="100" required>
-                            <div class="invalid-feedback">Vui lòng nhập tên công việc (Tối đa 100 ký tự và không bỏ trống)!</div>
-                        </div>
+</div>
 
-                        <div class="mb-3">
-                            <label class="form-label text-muted fw-semibold small d-block">Priority</label>
-                            <div class="btn-group-priority" role="group">
-                                <input type="radio" class="btn-check" name="priorityOptions" id="btn-high" value="High" required>
-                                <label class="btn btn-outline-danger px-4 rounded-pill me-2" for="btn-high">High</label>
-
-                                <input type="radio" class="btn-check" name="priorityOptions" id="btn-medium" value="Medium">
-                                <label class="btn btn-outline-warning px-4 rounded-pill me-2" for="btn-medium">Medium</label>
-
-                                <input type="radio" class="btn-check" name="priorityOptions" id="btn-low" value="Low">
-                                <label class="btn btn-outline-success px-4 rounded-pill" for="btn-low">Low</label>
-                            </div>
+<div class="modal fade" id="addTaskModal" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered" style="max-width: 600px;">
+        <div class="modal-content p-3 rounded-4 border-0 shadow">
+            
+            <div class="modal-header border-0 pb-0">
+                <h5 class="modal-title fw-bold text-dark" style="font-size: 1.25rem;">Add Task</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close" id="closeModalBtn"></button>
+            </div>
+            
+            <div class="modal-body">
+                <form id="taskForm" onsubmit="saveNewTask(event)">
+                    <div class="mb-3">
+                        <label for="inputTaskName" class="form-label fw-semibold text-secondary small">Task</label>
+                        <input type="text" class="form-control py-2 rounded-3" id="inputTaskName" placeholder="Type your task here..." style="border: 1px solid #e2e8f0;">
+                        <div id="errorFeedback" class="invalid-feedback">
+                            Tên công việc không được trống và không được quá 100 ký tự!
                         </div>
                     </div>
-                    <div class="modal-footer border-0 pt-0">
-                        <button type="button" class="btn btn-save px-4 py-2 fw-semibold" onclick="saveTask()">Add</button>
+
+                    <div class="mb-4">
+                        <label class="form-label fw-semibold text-secondary small d-block">Priority</label>
+                        <div class="d-flex gap-2">
+                            <input type="radio" class="btn-check" name="prioRadio" id="radioHigh" value="High" checked>
+                            <label class="btn btn-outline-danger-custom btn-sm px-3 py-1 rounded-3 fw-semibold" for="radioHigh">High</label>
+
+                            <input type="radio" class="btn-check" name="prioRadio" id="radioMedium" value="Medium">
+                            <label class="btn btn-outline-warning-custom btn-sm px-3 py-1 rounded-3 fw-semibold" for="radioMedium">Medium</label>
+
+                            <input type="radio" class="btn-check" name="prioRadio" id="radioLow" value="Low">
+                            <label class="btn btn-outline-success btn-sm px-3 py-1 rounded-3 fw-semibold" for="radioLow">Low</label>
+                        </div>
+                    </div>
+
+                    <div class="text-end">
+                        <button type="submit" class="btn btn-secondary px-4 py-2 fw-semibold rounded-3" style="background-color: #64748b; border: none;">Add</button>
                     </div>
                 </form>
             </div>
+
         </div>
     </div>
+</div>
 
-    <script src="bootstrap.bundle.min.js"></script>
+<script src="bootstrap.bundle.min.js"></script>
 
-    <script>
-        let tasks = [];
-        const taskModal = new bootstrap.Modal(document.getElementById('addTaskModal'));
+<script>
+    let listTasks = [];
 
-        function loadInitialData() {
-            if (localStorage.getItem('pureJsTasks')) {
-                tasks = JSON.parse(localStorage.getItem('pureJsTasks'));
-                renderTasks();
-            } else {
-                fetch('data.json')
-                    .then(response => response.json())
-                    .then(data => {
-                        tasks = data;
-                        renderTasks();
-                    })
-                    .catch(error => console.error("Lỗi đọc file JSON:", error));
+    window.onload = async function() {
+        const localData = localStorage.getItem('my_tasks_storage');
+        if (localData) {
+            listTasks = JSON.parse(localData);
+            displayTasksToUI();
+        } else {
+            try {
+                let response = await fetch('data.json');
+                listTasks = await response.json();
+            } catch (error) {
+                listTasks = [
+                    { "id": 1, "task": "Go to gym", "priority": "High", "status": "To Do" },
+                    { "id": 2, "task": "Read a book", "priority": "Low", "status": "Done" },
+                    { "id": 3, "task": "Go to market", "priority": "Medium", "status": "In Progress" },
+                    { "id": 4, "task": "Learn Web Development", "priority": "High", "status": "In Progress" },
+                    { "id": 5, "task": "Do homework", "priority": "Low", "status": "To Do" }
+                ];
             }
+            updateLocalStorage();
+            displayTasksToUI();
+        }
+    };
+
+    function updateLocalStorage() {
+        localStorage.setItem('my_tasks_storage', JSON.stringify(listTasks));
+    }
+
+    // Phân tách dữ liệu động để vẽ nhãn và vòng tiến trình tương ứng cho từng hàng
+    function displayTasksToUI() {
+        const area = document.getElementById('mainTaskList');
+        area.innerHTML = ''; 
+
+        if (listTasks.length === 0) {
+            area.innerHTML = `<div class="text-center text-muted bg-white p-4 rounded-3">Chưa có công việc nào tồn tại.</div>`;
+            return;
         }
 
-        function renderTasks() {
-            const container = document.querySelector('.task-list');
-            container.innerHTML = ''; 
+        listTasks.forEach(item => {
+            // Logic 1: Xác định class cho vòng tròn tiến trình dựa trên trạng thái từ JSON
+            let circleClass = "circle-todo";
+            if (item.status === "In Progress") {
+                circleClass = "circle-progress";
+            } else if (item.status === "Done") {
+                circleClass = "circle-done";
+            }
 
-            tasks.forEach((task, index) => {
-                let priorityClass = "text-success";
-                if (task.priority === "High") priorityClass = "text-danger";
-                if (task.priority === "Medium") priorityClass = "text-warning";
+            // Logic 2: Nếu tạo mới chưa có trường status, mặc định hiển thị là "To Do"
+            let currentStatus = item.status ? item.status : "To Do";
 
-                let statusIcon = "○"; 
-                if (task.status === "Done") statusIcon = "●"; 
-                if (task.status === "In Progress") statusIcon = "◐"; 
+            const rowHTML = `
+                <div class="task-card-item shadow-sm">
+                    <div class="row align-items-center g-0 text-center text-md-start">
+                        
+                        <div class="col-12 col-md-4 text-start mb-2 mb-md-0">
+                            <div class="label-sub">Task</div>
+                            <div class="fw-semibold text-dark text-truncate pe-2" style="font-size: 0.95rem;">${item.task}</div>
+                        </div>
+                        
+                        <div class="col-3 col-md-2 text-start">
+                            <div class="label-sub">Priority</div>
+                            <div class="prio-${item.priority}" style="font-size: 0.95rem;">${item.priority}</div>
+                        </div>
+                        
+                        <div class="col-4 col-md-3 text-center">
+                            <div class="status-badge">${currentStatus}</div>
+                        </div>
+                        
+                        <div class="col-2 col-md-1 text-center">
+                            <span class="progress-circle ${circleClass}"></span>
+                        </div>
+                        
+                        <div class="col-3 col-md-2 text-end">
+                            <button class="btn-action-edit" title="Sửa công việc"></button>
+                            <button class="btn-action-delete" title="Xóa công việc" onclick="removeItem(${item.id})"></button>
+                        </div>
 
-                container.innerHTML += `
-                    <div class="task-item d-flex align-items-center justify-content-between p-3 bg-white shadow-sm">
-                        <div style="flex: 2;">
-                            <small class="text-muted d-block">Task</small>
-                            <span class="fw-semibold text-dark">${task.name}</span>
-                        </div>
-                        <div style="flex: 1.5;">
-                            <small class="text-muted d-block">Priority</small>
-                            <span class="fw-bold ${priorityClass}">${task.priority}</span>
-                        </div>
-                        <div style="flex: 1;">
-                            <span class="badge bg-light text-muted border px-3 py-2 rounded-pill">${task.status}</span>
-                        </div>
-                        <div class="d-flex align-items-center gap-3 text-end" style="flex: 1.5; justify-content: flex-end;">
-                            <span class="status-indicator text-primary">${statusIcon}</span>
-                            <button class="btn btn-sm btn-light border py-1 px-2 text-dark small" onclick="toggleStatus(${index})">Trạng thái</button>
-                            <button class="btn btn-sm btn-outline-danger py-1 px-2 fw-bold" onclick="deleteTask(${index})">Xóa</button>
-                        </div>
                     </div>
-                `;
-            });
+                </div>
+            `;
+            area.innerHTML += rowHTML;
+        });
+    }
 
-            localStorage.setItem('pureJsTasks', JSON.stringify(tasks));
+    function validateInputData(text) {
+        const cleanText = text.trim();
+        if (cleanText === "" || cleanText.length > 100) {
+            return false;
+        }
+        return true;
+    }
+
+    function saveNewTask(event) {
+        event.preventDefault(); 
+
+        const inputField = document.getElementById('inputTaskName');
+        const textValue = inputField.value;
+
+        if (validateInputData(textValue) === false) {
+            inputField.classList.add('is-invalid');
+            return; 
+        } else {
+            inputField.classList.remove('is-invalid');
         }
 
-        function openModal() {
-            const form = document.getElementById('taskForm');
-            form.reset();
-            form.classList.remove('was-validated');
-            taskModal.show();
-        }
+        const chosenPrio = document.querySelector('input[name="prioRadio"]:checked').value;
 
-        function saveTask() {
-            const form = document.getElementById('taskForm');
+        const currentNewItem = {
+            id: Date.now(), 
+            task: textValue.trim(),
+            priority: chosenPrio,
+            status: "To Do" // Công việc mới tạo mặc định gán trạng thái To Do theo kịch bản mẫu
+        };
 
-            if (!form.checkValidity()) {
-                form.classList.add('was-validated');
-                return;
-            }
+        listTasks.push(currentNewItem);
+        updateLocalStorage();
+        displayTasksToUI();
 
-            const nameValue = document.getElementById('input-task-name').value.trim();
-            const selectedRadio = document.querySelector('input[name="priorityOptions"]:checked');
-            const priorityValue = selectedRadio.value;
+        inputField.value = '';
+        document.getElementById('closeModalBtn').click();
+    }
 
-            if (nameValue.length > 100) {
-                alert("Dữ liệu nhập vào không hợp lệ! Tên nhiệm vụ không được vượt quá 100 ký tự.");
-                return; 
-            }
-
-            tasks.push({
-                id: Date.now().toString(),
-                name: nameValue,
-                priority: priorityValue,
-                status: "To Do"
-            });
-
-            taskModal.hide();
-            renderTasks();
-        }
-
-        function deleteTask(index) {
-            if (confirm(`Bạn có chắc chắn muốn xóa nhiệm vụ "${tasks[index].name}" không?`)) {
-                tasks.splice(index, 1);
-                renderTasks();
-            }
-        }
-
-        function toggleStatus(index) {
-            const current = tasks[index].status;
-            if (current === "To Do") tasks[index].status = "In Progress";
-            else if (current === "In Progress") tasks[index].status = "Done";
-            else tasks[index].status = "To Do";
-            renderTasks();
-        }
-
-        loadInitialData();
-    </script>
+    function removeItem(targetId) {
+        listTasks = listTasks.filter(item => item.id !== targetId);
+        updateLocalStorage();
+        displayTasksToUI();
+    }
+</script>
 </body>
-
 </html>
